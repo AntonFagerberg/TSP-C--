@@ -3,6 +3,8 @@
 #include <math.h>
 #include <float.h>
 #include <iomanip>
+#include <random>
+#include <chrono>
 
 using namespace std;
 
@@ -29,7 +31,7 @@ static int nodes[] = {33,35,72,40,87,51,64,23,10,10,55,45,7,60,99,24,81,64,57,97
 
 static const int len = sizeof(nodes) / (2 * sizeof(nodes[0]));
 static double matrix[len * len];
-static int path[len], tempPath[len];
+static int path[len];
 
 double length(int path[], double matrix[], int length) {
     double sum = matrix[length * path[0] + path[length - 1]];
@@ -60,22 +62,29 @@ int main() {
         path[i] = i;
     }
     
+    unsigned seed = chrono::system_clock::now().time_since_epoch().count();
     double record = length(path, matrix, len), tempRecord = 0;
-    printRecord(record, path, len);
-    
+
     while (true) {
-        for (int i = 0; i != len - 1; ++i) {
-            for (int j = i + 1; j != len; ++j) {
-                copy(path, path + len, tempPath);
-                reverse(tempPath + i, tempPath + j);
-                tempRecord = length(tempPath, matrix, len);
+    	shuffle(path, path + len, default_random_engine(seed));
+    	tempRecord = length(path, matrix, len);
+    	if (tempRecord < record) {
+            record = tempRecord;
+            printRecord(record, path, len);
+        }
+        
+        for (int i = 0; i != len - 2; ++i) {
+            for (int j = i + 2; j != len; ++j) {
+                reverse(path + i, path + j);
+                tempRecord = length(path, matrix, len);
                 
                 if (tempRecord < record) {
                     record = tempRecord;
-                    copy(tempPath, tempPath + len, path);
                     printRecord(record, path, len);
                     i = 0;
                     j = 1;
+                } else {
+                	reverse(path + i, path + j);
                 }
             }
         }

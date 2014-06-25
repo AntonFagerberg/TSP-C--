@@ -32,9 +32,10 @@ static int nodes[] = {9222,6435,2423,9796,8412,3095,561,923,2302,1286,8889,5918,
 static const int len = sizeof(nodes) / (2 * sizeof(nodes[0]));
 static double matrix[len * len];
 static int path[len];
+static double sum;
 
 double length(int path[], double matrix[], int length) {
-    double sum = matrix[length * path[0] + path[length - 1]];
+    sum = matrix[length * path[0] + path[length - 1]];
     
     for (int i = 0; i != length - 1; ++i) {
         sum += matrix[length * path[i] + path[i + 1]];
@@ -67,13 +68,14 @@ int main() {
 
     while (true) {
     	shuffle(path, path + len, default_random_engine(seed));
+
     	tempRecord = length(path, matrix, len);
     	if (tempRecord < record) {
             record = tempRecord;
             printRecord(record, path, len);
         }
         
-        for (int i = 0; i != len - 2; ++i) {
+        for (int i = 0; i != len - 1; ++i) {
             for (int j = i + 2; j != len; ++j) {
                 reverse(path + i, path + j);
                 tempRecord = length(path, matrix, len);

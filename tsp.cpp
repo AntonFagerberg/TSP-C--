@@ -31,8 +31,6 @@ static int nodes[] = {33,35,72,40,87,51,64,23,10,10,55,45,7,60,99,24,81,64,57,97
 // 10
 //static int nodes[] = {76,85,34,17,19,44,63,72,98,77,42,32,12,96,43,62,16,75,9,94};
 
-//static int nodes[] = {0, 1, 2, 4, 5};
-
 static const int size = sizeof(nodes) / (2 * sizeof(nodes[0]));
 static double matrix[size * size];
 static int path[size];

@@ -67,15 +67,18 @@ int main() {
     
     double record = length() + 1, len1 = record, len2 = 0;
     auto gen = default_random_engine(chrono::system_clock::now().time_since_epoch().count());
+    bool skipShuffle = false;
     
     while (true) {
-    	shuffle(path, path + size, gen);
+    	if (!skipShuffle) {
+    		shuffle(path, path + size, gen);
 
-    	len1 = length();
-    	if (len1 < record) {
-            record = len1;
-            printRecord(record);
-        }
+    		len1 = length();
+	    	if (len1 < record) {
+	            record = len1;
+	            printRecord(record);
+	        }
+    	}
 
         for (int i = 0; i != size; ++i) {
             for (int j = i + 2; j != size + 1; ++j) {
@@ -96,6 +99,104 @@ int main() {
                     len1 = len2;
                 }
             }
+        }
+
+        skipShuffle = false;
+
+        for (int i = 0; i != size - 2; ++i) {
+        	for (int j = i + 1; j != size - 1; ++j) {
+        		for (int k = j + 1; k != size; ++k) {
+	        		swap(path[i], path[j]);
+	        		swap(path[j], path[k]);
+
+	        		len2 = length();
+
+	        		if (len1 <= len2) {
+	        			swap(path[j], path[k]);
+	                	swap(path[i], path[j]);
+	                } else {
+	                	if (len2 < record) {
+		                    record = len2;
+		                    printRecord(record);
+		                }
+
+		                skipShuffle = true;
+	                    i = 0;
+	                    j = 1;
+	                    k = 1;
+	                    len1 = len2;
+	                }
+	            }
+        	}
+        }
+
+        for (int i = 0; i != size - 3; ++i) {
+        	for (int j = i + 1; j != size - 2; ++j) {
+        		for (int k = j + 1; k != size - 1; ++k) {
+        			for (int l = k + 1; l != size; ++l) {
+		        		swap(path[i], path[j]);
+		        		swap(path[j], path[k]);
+		        		swap(path[k], path[l]);
+
+		        		len2 = length();
+
+		        		if (len1 <= len2) {
+		        			swap(path[k], path[l]);
+		        			swap(path[j], path[k]);
+		                	swap(path[i], path[j]);
+		                } else {
+		                	if (len2 < record) {
+			                    record = len2;
+			                    printRecord(record);
+			                }
+
+			                skipShuffle = true;
+		                    i = 0;
+		                    j = 1;
+		                    k = 2;
+		                    l = 2;
+		                    len1 = len2;
+		                }
+		            }
+	            }
+        	}
+        }
+
+        for (int i = 0; i != size - 4; ++i) {
+        	for (int j = i + 1; j != size - 3; ++j) {
+        		for (int k = j + 1; k != size - 2; ++k) {
+        			for (int l = k + 1; l != size - 1; ++l) {
+        				for (int m = l + 1; m != size; ++m) {
+			        		swap(path[i], path[j]);
+			        		swap(path[j], path[k]);
+			        		swap(path[k], path[l]);
+			        		swap(path[l], path[m]);
+
+			        		len2 = length();
+
+			        		if (len1 <= len2) {
+			        			swap(path[l], path[m]);
+			        			swap(path[k], path[l]);
+			        			swap(path[j], path[k]);
+			                	swap(path[i], path[j]);
+			                } else {
+			                	if (len2 < record) {
+				                    record = len2;
+				                    printRecord(record);
+				                }
+
+				                skipShuffle = true;
+			                    i = 0;
+			                    j = 1;
+			                    k = 2;
+			                    l = 3;
+			                    m = 3;
+			                    len1 = len2;
+			                }
+			            }
+		            }
+	            }
+        	}
         }
     }
 }
